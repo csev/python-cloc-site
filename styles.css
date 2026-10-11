@@ -69,7 +69,8 @@ h2 {
   font-size: clamp(1.35rem, 2.2vw, 1.75rem);
 }
 
-.hero-image {
+.hero-image,
+.hero-swap {
   float: right;
   width: min(46%, 430px);
   margin: 0 0 18px 28px;
@@ -77,6 +78,41 @@ h2 {
   border: 1px solid #bcc8d4;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
   cursor: zoom-in;
+}
+
+.hero-swap {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-swap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hero-swap .hero-fade {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.hero-swap .hero-fade.is-visible {
+  opacity: 1;
+}
+
+.hero-swap:focus-visible {
+  outline: 3px solid rgba(255, 203, 5, 0.85);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-swap .hero-fade {
+    transition: none;
+  }
 }
 
 p { margin: 0 0 1rem; }
@@ -163,7 +199,8 @@ footer a { color: var(--blue); }
 }
 
 @media (max-width: 720px) {
-  .hero-image {
+  .hero-image,
+  .hero-swap {
     float: none;
     display: block;
     width: 100%;

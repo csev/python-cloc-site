@@ -10,7 +10,7 @@ Files:
   utm.sqlite       SQLite data file (created automatically on first home-page hit)
   styles.css       Layout and styling
   script.js        Click-to-open image modal
-  assets/          Hero image
+  assets/          Home page and about page images
 
 Run locally with the Python standard library. No packages or build step:
 
@@ -45,6 +45,10 @@ UTM TRACKING
     Delete the file to leave viewing open. Do not commit utm-password.txt.
 
 IMPORTANT LINK CHECK
+On the home page:
+  On-campus registration (U-M credit):
+    https://wolverineaccess.umich.edu/
+
 On both pages:
   Register:
     https://si-ali.catalog.instructure.com/courses/python-for-everybody-with-ai
