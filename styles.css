@@ -83,12 +83,14 @@ h2 {
 .hero-swap {
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .hero-swap img {
   display: block;
   width: 100%;
   height: auto;
+  pointer-events: none;
 }
 
 .hero-swap .hero-fade {
