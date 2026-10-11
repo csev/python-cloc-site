@@ -64,6 +64,8 @@ On both pages:
     https://www.linkedin.com/pulse/campus-linked-open-course-charles-severance-hjccc/
   YouTube video:
     https://www.youtube.com/watch?v=vaEBaRATTt8&list=PLQqtpRlfsBek&index=2
+  AI Coding with Dr. Chuck podcast (home page):
+    https://www.youtube.com/playlist?list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD
   First week welcome video:
     https://www.youtube.com/watch?v=0lUAYNDl-mM&list=PLQqtpRlfsBek&index=1
 
