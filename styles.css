@@ -1,0 +1,174 @@
+:root {
+  --blue: #00274c;
+  --blue-deep: #001a33;
+  --maize: #ffcb05;
+  --ink: #18212b;
+  --muted: #5b6673;
+  --paper: #ffffff;
+  --line: #d9e0e7;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: #f4f7fa;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+
+header {
+  background: var(--blue);
+  color: white;
+  border-bottom: 5px solid var(--maize);
+}
+
+.header-inner,
+main,
+footer {
+  width: min(100% - 32px, 980px);
+  margin-inline: auto;
+}
+
+.header-inner {
+  padding: 20px 0 18px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
+  line-height: 1.15;
+}
+
+header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header p {
+  margin: 5px 0 0;
+  color: #e7eef5;
+}
+
+main {
+  margin-top: 26px;
+  margin-bottom: 32px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: clamp(22px, 4vw, 38px);
+  box-shadow: 0 12px 30px rgba(0, 39, 76, 0.08);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--blue);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+}
+
+.hero-image {
+  float: right;
+  width: min(46%, 430px);
+  margin: 0 0 18px 28px;
+  border-radius: 10px;
+  border: 1px solid #bcc8d4;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+  cursor: zoom-in;
+}
+
+p { margin: 0 0 1rem; }
+
+.actions {
+  margin: 1.25rem 0 1.3rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.actions a {
+  display: block;
+  padding: 12px 15px;
+  border: 1px solid #b7c4d0;
+  border-left: 5px solid var(--maize);
+  border-radius: 7px;
+  background: #f8fafc;
+  color: var(--blue);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.actions a:hover,
+.actions a:focus-visible {
+  background: #eef4f8;
+  outline: 3px solid rgba(255, 203, 5, 0.55);
+  outline-offset: 2px;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+footer {
+  padding: 0 0 28px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+footer a { color: var(--blue); }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh 3vw;
+  background: rgba(0, 0, 0, 0.86);
+}
+
+.modal.open { display: flex; }
+
+.modal img {
+  width: 90vw;
+  max-width: 1672px;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+}
+
+.modal-close {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  .hero-image {
+    float: none;
+    display: block;
+    width: 100%;
+    margin: 0 0 20px;
+  }
+
+  main { margin-top: 16px; }
+}

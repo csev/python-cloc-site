@@ -1,0 +1,8 @@
+utm.sqlite
+utm.sqlite-journal
+utm.sqlite-wal
+utm.sqlite-shm
+utm-password.txt
+*.swp
+.DS_Store
+__pycache__/
