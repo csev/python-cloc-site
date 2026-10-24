@@ -4,8 +4,10 @@ Course: Python for Everybody with AI (CLOC-502)
 Campus course: SI 502
 
 Files:
-  app.py           Site server, UTM tracking, and live results
-  index.html       Home page (UTM visits are recorded when served by app.py)
+  index.php        Home page entry (includes utm-live.php, then sends index.html)
+  utm-live.php     UTM tracker + live results page (same file as the Django site)
+  app.py           Local Python server with the same UTM behavior
+  index.html       Home page markup
   about.html       Short explanation of the CLOC model
   utm.sqlite       SQLite data file (created automatically on first home-page hit)
   styles.css       Layout and styling
@@ -22,7 +24,9 @@ HOST and PORT change the bind address (defaults: 127.0.0.1 and 8080).
 app.py also exposes a WSGI callable named application, and it runs as a
 CGI script when GATEWAY_INTERFACE is set.
 
-Point python.dr-chuck.com at this folder and let the WSGI app serve it.
+Point python.dr-chuck.com at this folder. PHP serves index.php, which records
+the visit and then sends index.html. Open utm-live.php for the counts.
+app.py is the same site without PHP, for a local Python server.
 
 UTM TRACKING
   Home page visits that include standard utm_* query parameters are recorded.
@@ -33,16 +37,19 @@ UTM TRACKING
     http://127.0.0.1:8080/?utm=qr
 
   View live counts:
-    http://127.0.0.1:8080/utm-live
+    https://python.dr-chuck.com/utm-live.php
+    or http://127.0.0.1:8080/utm-live when using app.py
 
   Storage columns: utm_string, count, first_use, last_use (UTC).
   Cap: 250 distinct UTM strings. Extra rows are deleted by oldest last_use.
   Visits with no UTM are stored as (none) and are never pruned.
 
   Optional password for viewing results (tracking itself is never passworded):
-    Create utm-password.txt in this folder containing only the password.
-    While that file exists and is non-empty, /utm-live asks for it.
-    Delete the file to leave viewing open. Do not commit utm-password.txt.
+    On the PHP host, create utm-password.php containing only:
+      <?php return 'your-secret-here';
+    For app.py, create utm-password.txt containing only the password.
+    While that file exists and is non-empty, the live page asks for it.
+    Delete the file to leave viewing open. Do not commit the password file.
 
 IMPORTANT LINK CHECK
 On the home page:
