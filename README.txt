@@ -58,13 +58,11 @@ On the home page:
 
 On both pages:
   Register:
-    https://si-ali.catalog.instructure.com/courses/python-for-everybody-with-ai
+    https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai
   Course dashboard:
     https://si-ali.catalog.instructure.com/dashboard/in-progress
 
-  The register URL follows the catalog slug pattern. As of 2026-10-11 the
-  catalog has not published that course yet (only the Django and Computer
-  Architecture listings exist). Update both register links when it does.
+  The non-credit register link is the Canvas catalog course page.
 
 On both pages:
   LinkedIn article:
