@@ -67,7 +67,7 @@ On both pages:
 
 On both pages:
   LinkedIn article:
-    https://www.linkedin.com/pulse/campus-linked-open-course-charles-severance-hjccc/
+    https://www.linkedin.com/pulse/python-everybody-ai-my-second-campus-linked-open-course-severance-dwskc
   YouTube video:
     https://www.youtube.com/watch?v=vaEBaRATTt8&list=PLQqtpRlfsBek&index=2
   AI Coding with Dr. Chuck podcast (home page):
