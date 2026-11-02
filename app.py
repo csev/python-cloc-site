@@ -41,8 +41,6 @@ UTM_KEYS = ("utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content
 COOKIE_NAME = "utm_live_ok"
 
 PAGES = {
-    "/": ROOT / "index.html",
-    "/index.html": ROOT / "index.html",
     "/about.html": ROOT / "about.html",
 }
 STATIC_FILES = {
@@ -223,6 +221,15 @@ def respond(start_response, status, body: bytes, content_type: str, extra=None):
     return [body]
 
 
+def home_page() -> bytes:
+    """The course page lives in index.php, after the UTM include."""
+    text = (ROOT / "index.php").read_text(encoding="utf-8")
+    start = text.lower().find("<!doctype")
+    if start < 0:
+        start = text.lower().find("<html")
+    return text[start:].encode("utf-8") if start >= 0 else b""
+
+
 def file_response(start_response, path: Path, environ):
     content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
     if content_type.startswith("text/") or path.suffix in {".js", ".css"}:
@@ -382,7 +389,27 @@ def application(environ, start_response):
     if path != "/" and path.endswith("/"):
         path = path[:-1] or "/"
 
-    if path in ("/", "/index.html"):
+    if path == "/index.html":
+        if method not in ("GET", "HEAD"):
+            return respond(
+                start_response,
+                "405 Method Not Allowed",
+                b"",
+                "text/plain",
+                [("Allow", "GET, HEAD")],
+            )
+        query = environ.get("QUERY_STRING", "")
+        location = "index.php" + (("?" + query) if query else "")
+        note = f'<a href="{h(location)}">Continue</a>'.encode()
+        return respond(
+            start_response,
+            "302 Found",
+            b"" if method == "HEAD" else note,
+            "text/html; charset=utf-8",
+            [("Location", location), ("Cache-Control", "no-store")],
+        )
+
+    if path in ("/", "/index.php"):
         if method not in ("GET", "HEAD"):
             return respond(
                 start_response,
@@ -392,7 +419,17 @@ def application(environ, start_response):
                 [("Allow", "GET, HEAD")],
             )
         track(query_params(environ))
-        return file_response(start_response, PAGES["/"], environ)
+        body = home_page()
+        if method == "HEAD":
+            start_response(
+                "200 OK",
+                [
+                    ("Content-Type", "text/html; charset=utf-8"),
+                    ("Content-Length", str(len(body))),
+                ],
+            )
+            return [b""]
+        return respond(start_response, "200 OK", body, "text/html; charset=utf-8")
 
     if path in ("/utm-live", "/utm-live.py"):
         return utm_live(environ, start_response)

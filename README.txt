@@ -4,10 +4,10 @@ Course: Python for Everybody with AI (CLOC-502)
 Campus course: SI 502
 
 Files:
-  index.php        Home page entry (includes utm-live.php, then sends index.html)
+  index.php        Home page (includes utm-live.php, then the page markup)
   utm-live.php     UTM tracker + live results page (same file as the Django site)
   app.py           Local Python server with the same UTM behavior
-  index.html       Home page markup
+  index.html       Redirects to index.php so a direct hit is still tracked
   about.html       Short explanation of the CLOC model
   utm.sqlite       SQLite data file (created automatically on first home-page hit)
   styles.css       Layout and styling
@@ -25,8 +25,9 @@ app.py also exposes a WSGI callable named application, and it runs as a
 CGI script when GATEWAY_INTERFACE is set.
 
 Point python.dr-chuck.com at this folder. PHP serves index.php, which records
-the visit and then sends index.html. Open utm-live.php for the counts.
-app.py is the same site without PHP, for a local Python server.
+the visit and then sends the page. index.html redirects to index.php and keeps
+the query string, so a direct request is tracked too. Open utm-live.php for
+the counts. app.py is the same site without PHP, for a local Python server.
 
 UTM TRACKING
   Home page visits that include standard utm_* query parameters are recorded.

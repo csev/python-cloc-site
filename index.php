@@ -1,2 +1,79 @@
 <?php require __DIR__ . '/utm-live.php'; ?>
-<?php readfile(__DIR__ . '/index.html');
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Python for Everybody with AI — a Campus-Linked Open Course with Dr. Chuck.">
+  <title>Python for Everybody with AI — CLOC-502</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    (function () {
+      var url = new URL(window.location.href);
+      if (url.searchParams.has('utm') && !url.searchParams.has('utm_source')) {
+        url.searchParams.set('utm_source', url.searchParams.get('utm'));
+        window.history.replaceState({}, '', url);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>Python for Everybody and AI - CLOC-502</h1>
+      <p>A Campus-Linked Open Course</p>
+    </div>
+  </header>
+
+  <main class="clearfix">
+    <div
+      class="hero-swap"
+      tabindex="0"
+      role="button"
+      aria-label="Switch the course image"
+      data-modal-image>
+      <img src="assets/python-with-ai-code.jpg" alt="Python with AI code artwork">
+      <img class="hero-fade" src="assets/python-without-ai.jpg" alt="Python without AI artwork">
+      <img class="hero-fade" src="assets/python-with-ai.jpg" alt="Python with AI artwork">
+      <img class="hero-fade" src="assets/python-master-programmer.jpg" alt="Becoming a Master Programmer using AI artwork">
+    </div>
+
+    <h2>Learn Python first.<br/>Then learn Python with AI.</h2>
+
+    <p>Hi, I'm Dr. Chuck.  Welcome to Python for Everybody with AI.  This is a practical Python course that starts with the fundamentals of programming without AI assistance. Once you have a solid foundation, we'll introduce AI as a tool for learning Python and then use AI to tackle more advanced programming projects. The course includes readings, videos, exercises, assignments, weekly communication, and live help. There are no university grades or credit, and you can keep working after the campus semester ends. The goal is to help online learners build real programming skills, learn to use AI effectively, and stay connected and motivated along the way.</p>
+
+    <p><strong>The course will start January 1st, 2027, enrollment will be limited to the first 200 students, and registration will be closed February 2, 2027.</strong></p>
+
+    <ul class="actions" aria-label="Course links">
+      <li><a href="https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai" target="_blank" rel="noopener noreferrer">Register for the course (Non Credit)</a></li>
+      <li><a href="https://www.linkedin.com/pulse/campus-linked-open-course-charles-severance-hjccc/" target="_blank" rel="noopener noreferrer">Read the LinkedIn article on the CLOC</a></li>
+      <li><a href="https://www.youtube.com/watch?v=vaEBaRATTt8&amp;list=PLQqtpRlfsBek&amp;index=2" target="_blank" rel="noopener noreferrer">Watch the YouTube video about the CLOC</a></li>
+      <li><a href="https://www.youtube.com/playlist?list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD" target="_blank" rel="noopener noreferrer">Watch the AI Coding with Dr. Chuck podcast</a></li>
+<!--
+      <li><a href="https://www.youtube.com/watch?v=0lUAYNDl-mM&amp;list=PLQqtpRlfsBek&amp;index=1" target="_blank" rel="noopener noreferrer">Watch the first week welcome video</a></li>
+-->
+<!--
+      <li><a href="https://si-ali.catalog.instructure.com/dashboard/in-progress" target="_blank" rel="noopener noreferrer">Enrolled Students: Course Dashboard</a></li>
+-->
+      <li><a href="https://wolverineaccess.umich.edu/" target="_blank" rel="noopener noreferrer">Register for the course (On Campus Students for Credit)</a></li>
+      <li><a href="about.html">More information about the course</a></li>
+    </ul>
+
+    <p>I built this non-credit, online section of my SI-502 on campus course for people who like the flexibility of online learning but do not want to feel completely on their own. You can work from anywhere, follow the course calendar, and get help from the instructional team while the University of Michigan campus course is running.</p>
+    
+    <p class="note">Click the image to switch it.</p>
+  </main>
+
+  <footer>
+    <p>python.dr-chuck.com</p>
+  </footer>
+
+  <div id="image-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Course image preview">
+    <button class="modal-close" type="button" aria-label="Close image preview">&times;</button>
+    <img src="assets/python-with-ai-code.jpg" alt="Python with AI code artwork enlarged">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
