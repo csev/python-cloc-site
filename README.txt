@@ -69,7 +69,7 @@ On both pages:
   LinkedIn article:
     https://www.linkedin.com/pulse/python-everybody-ai-my-second-campus-linked-open-course-severance-dwskc
   YouTube video:
-    https://www.youtube.com/watch?v=vaEBaRATTt8&list=PLQqtpRlfsBek&index=2
+    https://www.youtube.com/watch?v=p9Mt_bo-tqg&list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD
   AI Coding with Dr. Chuck podcast (home page):
     https://www.youtube.com/playlist?list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD
   First week welcome video:

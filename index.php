@@ -48,7 +48,7 @@
     <ul class="actions" aria-label="Course links">
       <li><a href="https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai" target="_blank" rel="noopener noreferrer">Register for the course (Non Credit)</a></li>
       <li><a href="https://www.linkedin.com/pulse/python-everybody-ai-my-second-campus-linked-open-course-severance-dwskc" target="_blank" rel="noopener noreferrer">Read the LinkedIn Article About CLOC-502 - Python for Everybody with AI</a></li>
-      <li><a href="https://www.youtube.com/watch?v=vaEBaRATTt8&amp;list=PLQqtpRlfsBek&amp;index=2" target="_blank" rel="noopener noreferrer">Watch the YouTube video about the CLOC</a></li>
+      <li><a href="https://www.youtube.com/watch?v=p9Mt_bo-tqg&amp;list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD" target="_blank" rel="noopener noreferrer">Watch the YouTube video about the CLOC</a></li>
       <li><a href="https://www.youtube.com/playlist?list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD" target="_blank" rel="noopener noreferrer">Watch the AI Coding with Dr. Chuck podcast</a></li>
 <!--
       <li><a href="https://www.youtube.com/watch?v=0lUAYNDl-mM&amp;list=PLQqtpRlfsBek&amp;index=1" target="_blank" rel="noopener noreferrer">Watch the first week welcome video</a></li>
