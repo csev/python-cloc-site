@@ -83,5 +83,5 @@ On about.html only:
 
 External links open in a new tab.
 
-The Django site's Google tag (G-CMHFYWME8L) is not copied here.
-Add a separate measurement id on these pages if this course needs analytics.
+Google Tag Manager container GTM-P6NRN8JV is on index.php and about.html.
+The Django site's Google tag (G-CMHFYWME8L) is a separate property.

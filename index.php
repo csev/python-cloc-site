@@ -17,6 +17,13 @@
       }
     })();
   </script>
+  <!-- Google Tag Manager -->
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-P6NRN8JV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  </script>
 </head>
 <body>
   <header>
