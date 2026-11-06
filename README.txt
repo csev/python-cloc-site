@@ -5,8 +5,9 @@ Campus course: SI 502
 
 Files:
   index.php        Home page (includes utm-live.php, then the page markup)
-  utm-live.php     UTM tracker + live results page (same file as the Django site)
-  app.py           Local Python server with the same UTM behavior
+  utm-live.php     UTM tracker, Register click counts, and the live results page
+  register.php     Counts a tracked link click, then redirects to its destination
+  app.py           Local Python server with the same UTM and click behavior
   index.html       Redirects to index.php so a direct hit is still tracked
   about.html       Short explanation of the CLOC model
   utm.sqlite       SQLite data file (created automatically on first home-page hit)
@@ -45,6 +46,18 @@ UTM TRACKING
   Cap: 250 distinct UTM strings. Extra rows are deleted by oldest last_use.
   Visits with no UTM are stored as (none) and are never pruned.
 
+  Link clicks are counted separately, then the browser is redirected.
+    Non credit (home):     register.php?to=noncredit
+      https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai
+    On campus (home):      register.php?to=campus
+      https://wolverineaccess.umich.edu/
+    Register (about):      register.php?to=about
+      https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai
+    Financial aid (about): register.php?to=finaid
+      https://forms.gle/gyRefPW8MBiSUPxJ7
+  Any other to= value redirects home and is not counted.
+  The live page lists each link. A count is a click, not a completed enrollment or aid application.
+
   Optional password for viewing results (tracking itself is never passworded):
     On the PHP host, create utm-password.php containing only:
       <?php return 'your-secret-here';
@@ -54,11 +67,9 @@ UTM TRACKING
 
 IMPORTANT LINK CHECK
 On the home page:
-  On-campus registration (U-M credit):
+  On-campus registration (U-M credit), via register.php?to=campus:
     https://wolverineaccess.umich.edu/
-
-On both pages:
-  Register:
+  Register (non credit), via register.php?to=noncredit:
     https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai
   Course dashboard:
     https://si-ali.catalog.instructure.com/dashboard/in-progress
@@ -76,7 +87,9 @@ On both pages:
     https://www.youtube.com/watch?v=0lUAYNDl-mM&list=PLQqtpRlfsBek&index=1
 
 On about.html only:
-  Financial aid:
+  Register, via register.php?to=about:
+    https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai
+  Financial aid, via register.php?to=finaid:
     https://forms.gle/gyRefPW8MBiSUPxJ7
   Master Programmer Curriculum:
     https://www.masterprogrammer.com

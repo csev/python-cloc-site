@@ -39,6 +39,24 @@ MAX_CODES = 250
 UTM_NONE = "(none)"
 UTM_KEYS = ("utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content")
 COOKIE_NAME = "utm_live_ok"
+CLICK_TARGETS = {
+    "noncredit": {
+        "label": "Register (Non Credit)",
+        "url": "https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai",
+    },
+    "campus": {
+        "label": "Register (On Campus)",
+        "url": "https://wolverineaccess.umich.edu/",
+    },
+    "about": {
+        "label": "Register (About)",
+        "url": "https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai",
+    },
+    "finaid": {
+        "label": "Apply for financial aid",
+        "url": "https://forms.gle/gyRefPW8MBiSUPxJ7",
+    },
+}
 
 PAGES = {
     "/about.html": ROOT / "about.html",
@@ -58,6 +76,16 @@ def connect() -> sqlite3.Connection:
         """
         CREATE TABLE IF NOT EXISTS utm (
             utm_string TEXT PRIMARY KEY NOT NULL,
+            count INTEGER NOT NULL DEFAULT 0,
+            first_use TEXT NOT NULL,
+            last_use TEXT NOT NULL
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS click (
+            name TEXT PRIMARY KEY NOT NULL,
             count INTEGER NOT NULL DEFAULT 0,
             first_use TEXT NOT NULL,
             last_use TEXT NOT NULL
@@ -163,6 +191,65 @@ def track(params: dict[str, str]) -> None:
             pass
     finally:
         conn.close()
+
+
+def track_click(name: str) -> None:
+    if name not in CLICK_TARGETS:
+        return
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    conn = connect()
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT count FROM click WHERE name = ?",
+            (name,),
+        ).fetchone()
+        if row:
+            conn.execute(
+                "UPDATE click SET count = count + 1, last_use = ? WHERE name = ?",
+                (now, name),
+            )
+        else:
+            conn.execute(
+                """
+                INSERT INTO click (name, count, first_use, last_use)
+                VALUES (?, 1, ?, ?)
+                """,
+                (name, now, now),
+            )
+        conn.execute("COMMIT")
+    except Exception:
+        try:
+            conn.execute("ROLLBACK")
+        except sqlite3.Error:
+            pass
+    finally:
+        conn.close()
+
+
+def click_rows() -> list[dict[str, str | int]]:
+    conn = connect()
+    try:
+        stored = {
+            row["name"]: row
+            for row in conn.execute(
+                "SELECT name, count, first_use, last_use FROM click"
+            )
+        }
+    finally:
+        conn.close()
+    rows = []
+    for name, target in CLICK_TARGETS.items():
+        row = stored.get(name)
+        rows.append(
+            {
+                "label": target["label"],
+                "count": int(row["count"]) if row else 0,
+                "first_use": row["first_use"] if row else "",
+                "last_use": row["last_use"] if row else "",
+            }
+        )
+    return rows
 
 
 def expected_password() -> str | None:
@@ -350,8 +437,61 @@ def dashboard(start_response):
             + "".join(rendered)
             + "</table>"
         )
-    body = f"  <p><a href=\"/\">Home</a></p>\n  <h1>UTM Live</h1>\n  {summary}\n  {table}\n"
+    click_rendered = []
+    for row in click_rows():
+        click_rendered.append(
+            "<tr>"
+            f"<td>{h(row['label'])}</td>"
+            f"<td>{int(row['count'])}</td>"
+            f"<td>{h(row['first_use'])}</td>"
+            f"<td>{h(row['last_use'])}</td>"
+            "</tr>"
+        )
+    clicks = (
+        "<h2>Link clicks</h2>"
+        "<p>Clicks on these links, not completed enrollments or aid applications. Times UTC.</p>"
+        '<table border="1" cellpadding="4" cellspacing="0">'
+        "<tr><th>link</th><th>count</th><th>first_use</th><th>last_use</th></tr>"
+        + "".join(click_rendered)
+        + "</table>"
+    )
+    body = (
+        "  <p><a href=\"/\">Home</a></p>\n  <h1>UTM Live</h1>\n  "
+        f"{summary}\n  {table}\n  {clicks}\n"
+    )
     return html_page(start_response, "UTM Live", body)
+
+
+def register(environ, start_response):
+    """Count a Register click, then redirect to a fixed destination."""
+    method = environ.get("REQUEST_METHOD", "GET").upper()
+    name = query_params(environ).get("to", "").strip().lower()
+    target = CLICK_TARGETS.get(name)
+    if target is None:
+        return respond(
+            start_response,
+            "302 Found",
+            b'<a href="index.php">Home</a>',
+            "text/html; charset=utf-8",
+            [("Location", "index.php"), ("Cache-Control", "no-store")],
+        )
+    if method == "GET":
+        track_click(name)
+    elif method != "HEAD":
+        return respond(
+            start_response,
+            "405 Method Not Allowed",
+            b"Method Not Allowed\n",
+            "text/plain; charset=utf-8",
+            [("Allow", "GET, HEAD"), ("Cache-Control", "no-store")],
+        )
+    return respond(
+        start_response,
+        "302 Found",
+        b"" if method == "HEAD" else f'<a href="{h(target["url"])}">Continue</a>'.encode(),
+        "text/html; charset=utf-8",
+        [("Location", target["url"]), ("Cache-Control", "no-store")],
+    )
 
 
 def utm_live(environ, start_response):
@@ -433,6 +573,9 @@ def application(environ, start_response):
 
     if path in ("/utm-live", "/utm-live.py"):
         return utm_live(environ, start_response)
+
+    if path in ("/register", "/register.php"):
+        return register(environ, start_response)
 
     page = PAGES.get(path)
     if page is not None and page.is_file():

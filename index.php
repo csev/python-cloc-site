@@ -53,7 +53,7 @@
     <p><strong>The course will start January 1st, 2027, enrollment will be limited to the first 200 students, and registration will be closed February 2, 2027.</strong></p>
 
     <ul class="actions" aria-label="Course links">
-      <li><a href="https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai" target="_blank" rel="noopener noreferrer">Register for the course (Non Credit)</a></li>
+      <li><a href="register.php?to=noncredit" target="_blank" rel="noopener noreferrer">Register for the course (Non Credit)</a></li>
       <li><a href="https://www.linkedin.com/pulse/python-everybody-ai-my-second-campus-linked-open-course-severance-dwskc" target="_blank" rel="noopener noreferrer">Read the LinkedIn Article About CLOC-502 - Python for Everybody with AI</a></li>
       <li><a href="https://www.youtube.com/watch?v=p9Mt_bo-tqg&amp;list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD" target="_blank" rel="noopener noreferrer">Watch the YouTube video about the CLOC</a></li>
       <li><a href="https://www.youtube.com/playlist?list=PLlRFEj9H3Oj4z2VavWJ_cgPs8u4-57adD" target="_blank" rel="noopener noreferrer">Watch the AI Coding with Dr. Chuck podcast</a></li>
@@ -63,7 +63,7 @@
 <!--
       <li><a href="https://si-ali.catalog.instructure.com/dashboard/in-progress" target="_blank" rel="noopener noreferrer">Enrolled Students: Course Dashboard</a></li>
 -->
-      <li><a href="https://wolverineaccess.umich.edu/" target="_blank" rel="noopener noreferrer">Register for the course (On Campus Students for Credit)</a></li>
+      <li><a href="register.php?to=campus" target="_blank" rel="noopener noreferrer">Register for the course (On Campus Students for Credit)</a></li>
       <li><a href="about.html">More information about the course</a></li>
     </ul>
 

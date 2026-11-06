@@ -19,6 +19,27 @@ define('UTM_PASSWORD_FILE', __DIR__ . '/utm-password.php');
 define('UTM_MAX_CODES', 250);
 define('UTM_NONE', '(none)');
 
+function utm_click_targets() {
+    return array(
+        'noncredit' => array(
+            'label' => 'Register (Non Credit)',
+            'url' => 'https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai',
+        ),
+        'campus' => array(
+            'label' => 'Register (On Campus)',
+            'url' => 'https://wolverineaccess.umich.edu/',
+        ),
+        'about' => array(
+            'label' => 'Register (About)',
+            'url' => 'https://si-ali.catalog.instructure.com/courses/cloc-502-python-for-everybody-with-ai',
+        ),
+        'finaid' => array(
+            'label' => 'Apply for financial aid',
+            'url' => 'https://forms.gle/gyRefPW8MBiSUPxJ7',
+        ),
+    );
+}
+
 function utm_db() {
     static $db = null;
     if ($db instanceof SQLite3) {
@@ -31,6 +52,14 @@ function utm_db() {
     $db->exec(
         'CREATE TABLE IF NOT EXISTS utm (
             utm_string TEXT PRIMARY KEY NOT NULL,
+            count INTEGER NOT NULL DEFAULT 0,
+            first_use TEXT NOT NULL,
+            last_use TEXT NOT NULL
+        )'
+    );
+    $db->exec(
+        'CREATE TABLE IF NOT EXISTS click (
+            name TEXT PRIMARY KEY NOT NULL,
             count INTEGER NOT NULL DEFAULT 0,
             first_use TEXT NOT NULL,
             last_use TEXT NOT NULL
@@ -136,6 +165,64 @@ function utm_track() {
     }
 }
 
+function utm_track_click($name) {
+    if (!isset(utm_click_targets()[$name])) {
+        return;
+    }
+
+    $now = gmdate('Y-m-d H:i:s');
+    $db = utm_db();
+    $db->exec('BEGIN IMMEDIATE');
+
+    try {
+        $stmt = $db->prepare('SELECT count FROM click WHERE name = :name');
+        $stmt->bindValue(':name', $name, SQLITE3_TEXT);
+        $row = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+
+        if ($row) {
+            $upd = $db->prepare(
+                'UPDATE click SET count = count + 1, last_use = :now WHERE name = :name'
+            );
+            $upd->bindValue(':now', $now, SQLITE3_TEXT);
+            $upd->bindValue(':name', $name, SQLITE3_TEXT);
+            $upd->execute();
+        } else {
+            $ins = $db->prepare(
+                'INSERT INTO click (name, count, first_use, last_use)
+                 VALUES (:name, 1, :now, :now)'
+            );
+            $ins->bindValue(':name', $name, SQLITE3_TEXT);
+            $ins->bindValue(':now', $now, SQLITE3_TEXT);
+            $ins->execute();
+        }
+
+        $db->exec('COMMIT');
+    } catch (Exception $e) {
+        $db->exec('ROLLBACK');
+    }
+}
+
+function utm_click_rows() {
+    $db = utm_db();
+    $stored = array();
+    $result = $db->query('SELECT name, count, first_use, last_use FROM click');
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+        $stored[$row['name']] = $row;
+    }
+
+    $rows = array();
+    foreach (utm_click_targets() as $name => $target) {
+        $row = isset($stored[$name]) ? $stored[$name] : null;
+        $rows[] = array(
+            'label' => $target['label'],
+            'count' => $row ? (int) $row['count'] : 0,
+            'first_use' => $row ? $row['first_use'] : '',
+            'last_use' => $row ? $row['last_use'] : '',
+        );
+    }
+    return $rows;
+}
+
 function utm_h($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
@@ -229,6 +316,7 @@ function utm_show_dashboard() {
     $stmt->bindValue(':none', UTM_NONE, SQLITE3_TEXT);
     $result = $stmt->execute();
     $row_count = (int) $db->querySingle('SELECT COUNT(*) FROM utm');
+    $click_rows = utm_click_rows();
 
     header('Content-Type: text/html; charset=utf-8');
     header('Cache-Control: no-store');
@@ -271,14 +359,34 @@ function utm_show_dashboard() {
       <?php endwhile; ?>
     </table>
   <?php endif; ?>
+
+  <h2>Link clicks</h2>
+  <p>Clicks on these links, not completed enrollments or aid applications. Times UTC.</p>
+  <table border="1" cellpadding="4" cellspacing="0">
+    <tr>
+      <th>link</th>
+      <th>count</th>
+      <th>first_use</th>
+      <th>last_use</th>
+    </tr>
+    <?php foreach ($click_rows as $click): ?>
+      <tr>
+        <td><?php echo utm_h($click['label']); ?></td>
+        <td><?php echo (int) $click['count']; ?></td>
+        <td><?php echo utm_h($click['first_use']); ?></td>
+        <td><?php echo utm_h($click['last_use']); ?></td>
+      </tr>
+    <?php endforeach; ?>
+  </table>
 </body>
 </html>
     <?php
 }
 
 // Included from another page → track. Opened directly → show live results.
+// register.php defines UTM_LIBRARY so a click is not also stored as a visit.
 if (realpath($_SERVER['SCRIPT_FILENAME']) === realpath(__FILE__)) {
     utm_show_dashboard();
-} else {
+} elseif (!defined('UTM_LIBRARY')) {
     utm_track();
 }
